@@ -1,55 +1,61 @@
-# AI Mod Analyzer — Version 0.1.0
+# ModLens
 
-A Windows desktop foundation for a future AI-assisted Skyrim mod analyzer.
+**See deeper. Find the problem. Fix your game.**
 
-## What works in this first build
+ModLens is a local-first Windows desktop application for inspecting modded game installations and helping diagnose problems. The initial target is Skyrim Special Edition / Anniversary Edition, with support planned for Steam, Vortex, Mod Organizer 2, manual installations, and mixed setups.
 
-- Dark desktop interface with Dashboard, Scanner, Troubleshooter, and Settings pages.
-- Initial Skyrim Special Edition installation detection using common registry and Steam paths.
-- Initial Vortex and Mod Organizer 2 detection using common install locations.
-- Reads the current Windows user’s Skyrim Special Edition `plugins.txt`.
-- Checks for `loadorder.txt` and counts files in the game's `Data` directory.
-- Captures a local symptom report in the Troubleshooter screen.
-- Saves the preferred AI mode locally (Hybrid, Local, Cloud, or Disabled).
+## Current status
 
-## Important limitations
-
-This is a foundation build, not a complete mod analyzer yet.
-
-- Detection is best-effort. Custom Steam libraries, portable manager installations, custom profiles, and non-standard paths may need manual path configuration in a later update.
-- `plugins.txt` is the standard Windows profile list and may not represent the active MO2 profile. MO2 profile-aware inventory is planned.
-- Vortex mod inventory and deployment/file winners are not yet parsed.
-- No plugin-record conflict analysis, LOOT sorting, crash-log interpretation, or AI diagnosis is implemented yet.
-- AI mode is a saved preference only. No local model or cloud provider is connected in this version.
-- The app does not modify the game, mod manager, plugins, load order, or user files.
+This repository contains the initial **Phase 0 foundation scaffold**. It establishes the application package, configuration, logging, SQLite initialization, background task abstraction, a basic PySide6 window, and starter tests. It does **not yet perform game or mod discovery**.
 
 ## Requirements
 
 - Windows 10 or Windows 11
 - Python 3.11 or newer
-- Internet connection for the first-time PySide6 installation
+- Git (optional, for source control)
+- GitHub Desktop (optional, for a graphical Git workflow)
 
-## Run
+## Set up
 
-1. Extract the ZIP to a folder such as `C:\\Tools\\AI-Mod-Analyzer`.
-2. Install Python 3.11+ from https://www.python.org/downloads/ if needed. During installation, enable the option to add Python to PATH.
-3. Double-click `run_windows.bat`.
-4. The launcher creates a local virtual environment, installs PySide6, and starts the app.
+From the repository folder:
 
-The first launch downloads PySide6. Later launches reuse the installed environment.
-
-## Project structure
-
-```text
-AI-Mod-Analyzer/
-├── main.py
-├── scanner.py
-├── settings.py
-├── requirements.txt
-├── run_windows.bat
-└── README.md
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+python -m modlens
 ```
 
-## Next development milestone
+If PowerShell blocks activation, run the application using the virtual environment's interpreter directly:
 
-The next milestone should add explicit game and manager path selection, accurate active-profile discovery for Vortex and MO2, manager-specific mod inventory, and a structured diagnostic report export. Keep all scanning read-only until the findings have been validated.
+```powershell
+.\.venv\Scripts\python.exe -m pip install -e ".[dev]"
+.\.venv\Scripts\python.exe -m modlens
+```
+
+## Run tests
+
+```powershell
+pytest
+```
+
+## Data and safety
+
+- Application data is stored under the current user's local application-data directory.
+- The initial foundation does not modify game files, mod files, manager profiles, or load order.
+- Discovery and scanning features will be read-only by default.
+- Do not place credentials, API keys, personal game logs, or private configuration files in Git.
+
+## Development roadmap
+
+1. Foundation and prototype audit
+2. Universal game and manager discovery
+3. Unified inventory for manager-managed, manual, and mixed setups
+4. Skyrim scanning and deterministic diagnostics
+5. Main UI and reporting
+6. AI Troubleshooter
+7. Profiles, history, and backups
+8. Live Assist
+9. Module system and additional games
+10. Packaging and release
